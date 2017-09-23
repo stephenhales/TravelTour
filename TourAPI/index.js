@@ -1,8 +1,9 @@
 "use strict";
 
 //index.js
-const express = require('express')
-const https = require('https')
+const express = require('express');
+const https = require('https');
+const fs = require('fs');
 const port = 3000;
 
 const app = express()
@@ -12,13 +13,13 @@ app.listen(port, function () {
 });
 
 app.get('/create', function (req, res) {
-  mapDemo();
+  getLocationDetails("Dallas");
   getLocationWiki("Dallas");
 });
 
 
-var mapDemo= function(){
-  const url = "https://maps.googleapis.com/maps/api/geocode/json?address=Dallas";
+var getLocationDetails= function(location){
+  const url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location;
   https.get(url, res => {
     res.setEncoding("utf8");
     let body = "";
@@ -27,13 +28,17 @@ var mapDemo= function(){
     });
     res.on("end", () => {
       body = JSON.parse(body);
-      console.log(
-        `City: ${body.results[0].formatted_address} -`,
-        `Latitude: ${body.results[0].geometry.location.lat} -`,
-        `Longitude: ${body.results[0].geometry.location.lng}`
-      );
+      displayLocationInfo(body);
     });
   });
+}
+
+var displayLocationInfo = function(body){
+  console.log(
+    `City: ${body.results[0].formatted_address} -`,
+    `Latitude: ${body.results[0].geometry.location.lat} -`,
+    `Longitude: ${body.results[0].geometry.location.lng}`
+  );
 }
 
 var getLocationWiki = function(location){
@@ -45,7 +50,17 @@ var getLocationWiki = function(location){
       body += data;
     });
     res.on("end", () => {
-      console.log(body);
+      saveWikiAsFile(body);
     });
+  });
+}
+
+var saveWikiAsFile = function(body){
+  fs.writeFile("test", body, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
   });
 }
