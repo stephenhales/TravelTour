@@ -1,15 +1,15 @@
-package com.traveltour;
+package com.tour;
 
 /**
  * Hello world!
  *
  */
-public class Greeting {
+public class Tour {
 
     private final long id;
     private final String content;
 
-    public Greeting(long id, String content) {
+    public Tour(long id, String content) {
         this.id = id;
         this.content = content;
     }

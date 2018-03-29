@@ -1,4 +1,4 @@
-package com.traveltour;
+package com.tour;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
