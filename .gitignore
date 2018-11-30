@@ -1,1 +1,3 @@
-/tourAPI/target/**
+.idea/*
+
+*target/*
