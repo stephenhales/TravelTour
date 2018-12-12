@@ -1,4 +1,4 @@
-package com.traveltour.tour.db.model;
+package com.traveltour.tour.model;
 
 import com.traveltour.place.db.model.Place;
 
