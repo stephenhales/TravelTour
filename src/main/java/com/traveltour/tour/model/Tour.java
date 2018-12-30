@@ -1,6 +1,6 @@
 package com.traveltour.tour.model;
 
-import com.traveltour.place.db.model.Place;
+import com.traveltour.place.model.Place;
 
 import java.util.List;
 

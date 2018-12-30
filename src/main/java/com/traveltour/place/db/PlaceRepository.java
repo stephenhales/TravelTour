@@ -1,12 +1,14 @@
-package com.traveltour.place.db.repository;
+package com.traveltour.place.db;
 
-import com.traveltour.place.db.model.Place;
+import com.traveltour.place.model.Place;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
 public interface PlaceRepository extends MongoRepository<Place, String>{
 
-    List<Place> findByName(String name);
+    List<Place> getPlacesByName(String name);
+
+    Place getPlaceByName(String name);
 
 }
