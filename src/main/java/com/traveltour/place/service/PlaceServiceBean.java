@@ -14,13 +14,25 @@ public class PlaceServiceBean implements PlaceService {
     @Autowired
     private PlaceRepository repository;
 
-    public List<Place> getPlacesByName(String name){
-        return repository.getPlacesByName(name);
+    @Autowired
+    private WikipediaService wikipediaService;
+
+    public Place getPlaceByName(String name){
+        Place place = repository.getPlaceByName(name);
+        if(place == null){
+            return createPlace(name);
+        }
+        return place;
     }
 
     public List<Place> getAllPlaces(){
         return repository.findAll();
     }
+
+    public void getPlacesOfInterest(){
+
+    }
+
 
     private void demo(){
         repository.deleteAll();
@@ -52,7 +64,9 @@ public class PlaceServiceBean implements PlaceService {
         System.out.println();
     }
 
-    public void createPlace(){
-
+    private Place createPlace(String name){
+        Place newPlace = wikipediaService.getPlace(name);
+        //repository.save(newPlace);
+        return newPlace;
     }
 }

@@ -2,6 +2,8 @@ package com.traveltour.place.model;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
+
 public class Place {
 
     @Id
@@ -9,15 +11,18 @@ public class Place {
 
     public String name;
     public int checkins;
-
-    //public String url;
-    //public Coordinate centerCoordinate;
-    //public int distance;
-    //public String category;
+    public String description;
+    public List<String> fields;
 
     public Place(String name, int checkins) {
         this.name = name;
         this.checkins = checkins;
+    }
+
+    public Place(String name, String description, List<String> fields) {
+        this.name = name;
+        this.description = description;
+        this.fields = fields;
     }
 
     @Override

@@ -20,9 +20,9 @@ public class PlaceController {
     private PlaceService placeService;
 
     @RequestMapping(value="/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Collection<Place>> getPlacesByName() {
-        Collection<Place> nearbyPlaces = placeService.getPlacesByName("Dallas");
-        return new ResponseEntity<>(nearbyPlaces, HttpStatus.OK);
+    public ResponseEntity<Place> getPlacesByName() {
+        Place location = placeService.getPlaceByName("London");
+        return new ResponseEntity<>(location, HttpStatus.OK);
     }
 
     @RequestMapping(value="/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,5 +30,4 @@ public class PlaceController {
         Collection<Place> nearbyPlaces = placeService.getAllPlaces();
         return new ResponseEntity<>(nearbyPlaces, HttpStatus.OK);
     }
-
 }

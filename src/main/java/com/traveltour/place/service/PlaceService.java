@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PlaceService {
 
-    List<Place> getPlacesByName(String name);
+    Place getPlaceByName(String name);
 
     List<Place> getAllPlaces();
 
