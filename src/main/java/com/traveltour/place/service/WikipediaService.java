@@ -1,67 +1,35 @@
 package com.traveltour.place.service;
 
 import com.traveltour.place.model.Place;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class WikipediaService {
     public Place getPlace(String name){
-        StringBuffer content = extractData(name);
-        return transformData(content);
+        Document doc = extractData(name);
+        return transformData(doc.toString());
     }
 
-    private StringBuffer extractData(String name) {
+    private Document extractData(String name) {
         String wikipedia = "https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&rvprop=content&titles=";
-        URL url = null;
-
+        Document doc = null;
         try {
-            url = new URL(wikipedia + name);
-        } catch (MalformedURLException e) {
-
-            e.printStackTrace();
-        }
-        HttpURLConnection con = null;
-        try {
-            con = (HttpURLConnection) url.openConnection();
+            doc = Jsoup.connect(wikipedia + name).ignoreContentType(true).get();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            con.setRequestMethod("GET");
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        }
 
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String inputLine;
-        StringBuffer content = new StringBuffer();
-        try {
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return content;
+        return doc;
     }
 
-    private Place transformData(StringBuffer content){
+    private Place transformData(String content){
         Place newPlace = new Place(
                 "London",
                 "It's in England",
@@ -69,15 +37,25 @@ public class WikipediaService {
         return newPlace;
     }
 
-    private List<String> getFields(StringBuffer content){
-        List<String> fields = new ArrayList<>();
-        fields.add(getHistory(content));
+    private List<Pair<String, String>> getFields(String content){
+        List<Pair<String, String>> fields = new ArrayList<>();
+        String start = "<h2>";
+        String end = "</h2>";
+
+        String[] sections = content.split(start);
+        for (String section : sections){
+            String[] _section = section.split(end);
+            if(_section.length == 2){
+                fields.add(Pair.of(getTitle(_section[0]), _section[1]));
+            }
+        }
+
         return fields;
     }
 
-    private String getHistory(StringBuffer content){
-        String start = ">Recreation<";
-        String end = ">Sport<";
-        return content.substring(content.indexOf(start), content.indexOf(end));
+    private String getTitle(String section){
+        String start = ">";
+        String end = "</span>";
+        return section.substring(section.indexOf(start)+1, section.indexOf(end));
     }
 }

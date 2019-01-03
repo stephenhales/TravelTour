@@ -26,6 +26,7 @@ public class PlaceServiceBean implements PlaceService {
     }
 
     public List<Place> getAllPlaces(){
+        demo();
         return repository.findAll();
     }
 
@@ -38,35 +39,14 @@ public class PlaceServiceBean implements PlaceService {
         repository.deleteAll();
 
         // save a couple of places
-        repository.save(new Place("Dallas", 200));
-        repository.save(new Place("Dallas, Texas", 3500));
-        repository.save(new Place("New York", 10000));
-
-        // fetch all places
-        System.out.println("Place found with findAll():");
-        System.out.println("-------------------------------");
-        for (Place place : repository.findAll()) {
-            System.out.println(place);
-        }
-        System.out.println();
-
-        // fetch an individual Place
-        System.out.println("Place found with getPlaceByName('Dallas'):");
-        System.out.println("--------------------------------");
-        System.out.println(repository.getPlaceByName("Dallas"));
-        System.out.println();
-
-        System.out.println("Places found with getPlacesByName('Dallas, Texas'):");
-        System.out.println("--------------------------------");
-        for (Place place : repository.getPlacesByName("Dallas, Texas")) {
-            System.out.println(place);
-        }
-        System.out.println();
+        repository.save(new Place("Dallas", "Dallas is pretty big"));
+        repository.save(new Place("Dallas, Texas", "Dallas is pretty big"));
+        repository.save(new Place("New York", "The big apple"));
     }
 
     private Place createPlace(String name){
         Place newPlace = wikipediaService.getPlace(name);
-        //repository.save(newPlace);
+        repository.save(newPlace);
         return newPlace;
     }
 }
