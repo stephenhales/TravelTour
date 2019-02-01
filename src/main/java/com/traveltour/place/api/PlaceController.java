@@ -25,7 +25,7 @@ public class PlaceController {
         return new ResponseEntity<>(location, HttpStatus.OK);
     }
 
-    @RequestMapping(value="/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<Place>> getAllPlaces() {
         Collection<Place> nearbyPlaces = placeService.getAllPlaces();
         return new ResponseEntity<>(nearbyPlaces, HttpStatus.OK);

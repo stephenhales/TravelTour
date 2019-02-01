@@ -26,26 +26,20 @@ public class PlaceServiceBean implements PlaceService {
     }
 
     public List<Place> getAllPlaces(){
-        demo();
         return repository.findAll();
     }
-
-    public void getPlacesOfInterest(){
-
-    }
-
 
     private void demo(){
         repository.deleteAll();
 
         // save a couple of places
-        repository.save(new Place("Dallas", "Dallas is pretty big"));
-        repository.save(new Place("Dallas, Texas", "Dallas is pretty big"));
-        repository.save(new Place("New York", "The big apple"));
+        repository.save(new Place("Dallas", "Dallas is pretty big", null));
+        repository.save(new Place("Dallas, Texas", "Dallas is pretty big", null));
+        repository.save(new Place("New York", "The big apple", null));
     }
 
     private Place createPlace(String name){
-        Place newPlace = wikipediaService.getPlace(name);
+        Place newPlace = new Place(name, "", wikipediaService.getPlaceDetails(name));
         repository.save(newPlace);
         return newPlace;
     }
