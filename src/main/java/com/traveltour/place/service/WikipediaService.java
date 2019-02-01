@@ -1,6 +1,5 @@
 package com.traveltour.place.service;
 
-import com.traveltour.place.model.Place;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,9 +11,8 @@ import java.util.List;
 
 @Service
 public class WikipediaService {
-    public Place getPlace(String name){
-        Document doc = extractData(name);
-        return transformData(doc.toString());
+    public List<Pair<String, String>> getPlaceDetails(String name){
+        return getFields(extractData(name).toString());
     }
 
     private Document extractData(String name) {
@@ -27,14 +25,6 @@ public class WikipediaService {
         }
 
         return doc;
-    }
-
-    private Place transformData(String content){
-        Place newPlace = new Place(
-                "London",
-                "It's in England",
-                getFields(content));
-        return newPlace;
     }
 
     //TODO - refactor this.
