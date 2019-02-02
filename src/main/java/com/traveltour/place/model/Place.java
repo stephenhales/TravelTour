@@ -14,10 +14,7 @@ public class Place {
     public String description;
     public PlaceDetails details;
 
-    public Place(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+    public Place() {  }
 
     public Place(String name, String description, List<Pair<String, String>> fields) {
         this.name = name;

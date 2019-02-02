@@ -12,7 +12,8 @@ import java.util.List;
 @Service
 public class WikipediaService {
     public List<Pair<String, String>> getPlaceDetails(String name){
-        return getFields(extractData(name).toString());
+        int initialHeaderLevel = 2;
+        return getFields(extractData(name).toString(), initialHeaderLevel);
     }
 
     private Document extractData(String name) {
@@ -27,43 +28,34 @@ public class WikipediaService {
         return doc;
     }
 
-    //TODO - refactor this.
-    private List<Pair<String, String>> getFields(String content){
+    private List<Pair<String, String>> getFields(String content, int headerLevel){
         List<Pair<String, String>> fields = new ArrayList<>();
-        String start = "<h2>";
-        String end = "</h2>";
 
-        String[] sections = content.split(start);
+        String[] sections = getSections(content, headerLevel);
         for (String section : sections){
-            String[] _section = section.split(end);
-            if(_section.length == 2){
-                if(_section[1].contains("<h3>")){
-                    fields.add(Pair.of(getTitle(_section[0]), ""));
-                    fields.addAll(getSubfields(_section[1]));
-                }
-                else
-                    fields.add(Pair.of(getTitle(_section[0]), _section[1]));
+            Pair<String, String> field = getField(splitSection(section, headerLevel));
+            fields.add(field);
+            if(field.getRight().contains("<h" + headerLevel+1 +">")){
+                fields.addAll(getFields(field.getRight(), headerLevel+1));
             }
         }
-
         return fields;
     }
 
-    //TODO - refactor this.
-    private List<Pair<String, String>> getSubfields(String content){
-        List<Pair<String, String>> fields = new ArrayList<>();
-        String start = "<h3>";
-        String end = "</h3>";
+    private String[] getSections(String content, int headerLevel){
+        return content.split("<h"+headerLevel+">");
+    }
 
-        String[] sections = content.split(start);
-        for (String section : sections){
-            String[] _section = section.split(end);
-            if(_section.length == 2){
-                fields.add(Pair.of(getTitle(_section[0]), _section[1]));
-            }
+    private String[] splitSection(String section, int headerLevel){
+        return section.split("</h"+headerLevel+">");
+    }
+
+    private Pair<String, String> getField(String[] section){
+        if(section.length == 2){
+            return Pair.of(getTitle(section[0]), section[1]);
         }
-
-        return fields;
+        //TODO
+        return null;
     }
 
     private String getTitle(String section){
