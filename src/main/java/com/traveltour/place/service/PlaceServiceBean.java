@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import com.traveltour.place.model.Place;
 import com.traveltour.place.db.PlaceRepository;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class PlaceServiceBean implements PlaceService {
@@ -26,16 +28,32 @@ public class PlaceServiceBean implements PlaceService {
     }
 
     public List<Place> getAllPlaces(){
-        return repository.findAll();
+        demo();
+        return Arrays.asList();
     }
 
     private void demo(){
         repository.deleteAll();
 
-        // save a couple of places
-        repository.save(new Place("Dallas", "Dallas is pretty big", null));
-        repository.save(new Place("Dallas, Texas", "Dallas is pretty big", null));
-        repository.save(new Place("New York", "The big apple", null));
+        List<String> places = Arrays.asList("London",
+                "Paris",
+                "Barcelona",
+                "Angkor Wat",
+                "Great Barrier Reef",
+                "Machu Picchu",
+                "Great Wall of China");
+
+        for(String place : places){
+            getPlaceByName(place);
+            try{
+                TimeUnit.SECONDS.sleep(1);
+            }
+            catch(InterruptedException e){
+
+            }
+        }
+
+
     }
 
     private Place createPlace(String name){

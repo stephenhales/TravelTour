@@ -34,9 +34,13 @@ public class WikipediaService {
         String[] sections = getSections(content, headerLevel);
         for (String section : sections){
             Pair<String, String> field = getField(splitSection(section, headerLevel));
-            fields.add(field);
-            if(field.getRight().contains("<h" + headerLevel+1 +">")){
+
+            if(field != null && field.getRight().contains("<h" + newHeaderInt(headerLevel) +">")){
+                fields.add(getHeader(field));
                 fields.addAll(getFields(field.getRight(), headerLevel+1));
+            }
+            else{
+                fields.add(field);
             }
         }
         return fields;
@@ -48,6 +52,14 @@ public class WikipediaService {
 
     private String[] splitSection(String section, int headerLevel){
         return section.split("</h"+headerLevel+">");
+    }
+
+    private int newHeaderInt(int currentHeader){
+        return currentHeader+1;
+    }
+
+    private Pair<String, String> getHeader(Pair<String, String> field){
+        return Pair.of(field.getLeft(), "");
     }
 
     private Pair<String, String> getField(String[] section){
